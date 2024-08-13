@@ -23,7 +23,7 @@ export default function StarRating({ maxRating = 5,
 
     function handleRating(rating) {
         setRating(rating)
-        onSetRating(rating)
+        onSetRating && onSetRating(rating)
     }
 
     const textStyle = {
