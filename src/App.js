@@ -58,7 +58,16 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("")
-  const [query, setQuery] = useState("interstellar");
+  const [query, setQuery] = useState("inception");
+  const [selectedId, setSelectedId] = useState(null)
+
+  function handleSelectMovie(id) {
+    setSelectedId(selectedId => id === selectedId ? null : id);
+  }
+
+  function handleCloseMovie() {
+    setSelectedId(null)
+  }
 
   useEffect(function () {
     async function fetchMovie() {
@@ -103,13 +112,21 @@ export default function App() {
       <Main>
         <Box>
           {/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error &&
+            <MovieList movies={movies}
+              onSelectMovie={handleSelectMovie} />}
           {isLoading && <Loader />}
           {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedList watched={watched} />
+          {
+            selectedId ?
+              <MovieDetails selectedId={selectedId}
+                onCloseMovie={handleCloseMovie} /> :
+              <>
+                <WatchedSummary watched={watched} />
+                <WatchedList watched={watched} />
+              </>}
         </Box>
       </Main>
     </>
@@ -217,20 +234,20 @@ function WatchedBox() {
   )
 }*/
 
-function MovieList({ movies }) {
+function MovieList({ movies, onSelectMovie }) {
 
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {movies?.map((movie) => (
-        <Movie movie={movie} />
+        <Movie movie={movie} onSelectMovie={onSelectMovie} />
       ))}
     </ul>
   )
 }
 
-function Movie({ movie }) {
+function Movie({ movie, onSelectMovie }) {
   return (
-    <li key={movie.imdbID}>
+    <li onClick={() => onSelectMovie(movie.imdbID)} key={movie.imdbID}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
@@ -242,7 +259,14 @@ function Movie({ movie }) {
     </li>)
 }
 
-
+function MovieDetails({ selectedId, onCloseMovie }) {
+  return <div className="details">
+    <button className="btn-back" onClick={onCloseMovie}>
+      &larr;
+    </button>
+    {selectedId}
+  </div>
+}
 
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
