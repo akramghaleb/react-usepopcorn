@@ -64,6 +64,7 @@ export default function App() {
     async function fetchMovie() {
       try {
         setIsLoading(true)
+        setError("")
         const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
 
         if (!res.ok) {
@@ -84,14 +85,19 @@ export default function App() {
       }
     }
 
+    if (query.length < 3) {
+      setMovies([])
+      setError("")
+      return
+    }
     fetchMovie()
-  }, [])
+  }, [query])
 
   return (
     <>
       <NavBar>
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
@@ -151,8 +157,7 @@ function NumResults({ movies }) {
   )
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({ query, setQuery }) {
 
   return (
     <input
