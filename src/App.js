@@ -67,6 +67,7 @@ export default function App() {
 
   function handleCloseMovie() {
     setSelectedId(null)
+    document.title = `Use popcorn`
   }
 
   function handleAddWatched(movie) {
@@ -329,6 +330,11 @@ function MovieDetails({
     }
     getMovieDetails()
   }, [selectedId]);
+
+  useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`
+  }, [title])
 
   function handleAdd() {
     const newWatchMovie = {
