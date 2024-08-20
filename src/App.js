@@ -67,7 +67,6 @@ export default function App() {
 
   function handleCloseMovie() {
     setSelectedId(null)
-    document.title = `Use popcorn`
   }
 
   function handleAddWatched(movie) {
@@ -334,6 +333,10 @@ function MovieDetails({
   useEffect(() => {
     if (!title) return;
     document.title = `Movie | ${title}`
+
+    return function () {
+      document.title = `UsePopcorn`
+    }
   }, [title])
 
   function handleAdd() {
