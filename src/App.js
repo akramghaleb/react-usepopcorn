@@ -58,7 +58,7 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("")
-  const [query, setQuery] = useState("inception");
+  const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null)
 
   function handleSelectMovie(id) {
@@ -100,9 +100,10 @@ export default function App() {
           throw new Error(`Movie not found`)
         }
       } catch (e) {
-        console.error(e.message)
+
         if (error.name !== "AbortError") {
           setError(e.message)
+          console.error(e.message)
         }
       } finally {
         setIsLoading(false)
@@ -114,6 +115,8 @@ export default function App() {
       setError("")
       return
     }
+
+    handleCloseMovie()
     fetchMovie()
 
     return function () {
@@ -309,7 +312,19 @@ function MovieDetails({
     Genre: genre
   } = movie
 
+  useEffect(() => {
+    function callback(e) {
+      if (e.code === "Escape") {
+        onCloseMovie()
+        // console.log("CLOSING")
+      }
+    }
+    document.addEventListener('keydown', callback)
 
+    return function () {
+      document.removeEventListener('keydown', callback)
+    }
+  }, [onCloseMovie])
 
   useEffect(() => {
     async function getMovieDetails() {
