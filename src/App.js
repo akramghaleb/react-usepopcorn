@@ -168,6 +168,10 @@ function NumResults({ movies }) {
 }
 
 function Search({ query, setQuery }) {
+  useEffect(() => {
+    const el = document.querySelector('.search')
+    el.focus()
+  }, [])
 
   return (
     <input
