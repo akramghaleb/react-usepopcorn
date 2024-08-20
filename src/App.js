@@ -249,6 +249,15 @@ function MovieDetails({
 
   // if (imdbRating > 8) return <p>Greatest ever!</p>
 
+  // const [isTop, setIsTop] = useState(imdbRating > 8)
+
+  // useEffect(() => {
+  //   setIsTop(imdbRating > 8)
+  // }, [imdbRating])
+
+  const isTop = imdbRating > 8;
+  console.log(isTop)
+
   useEffect(() => {
     function callback(e) {
       if (e.code === "Escape") {
@@ -301,6 +310,8 @@ function MovieDetails({
     }
   }, [title])
 
+  // const [averageRating, setAverageRating] = useState(0)
+
   function handleAdd() {
     const newWatchMovie = {
       imdbID: selectedId,
@@ -314,6 +325,9 @@ function MovieDetails({
 
     onAddWatched(newWatchMovie)
     onCloseMovie()
+
+    // setAverageRating(Number(imdbRating))
+    // setAverageRating((avgRating) => (avgRating + userRating) / 2)
   }
 
   return <div className="details">
@@ -337,6 +351,8 @@ function MovieDetails({
             </p>
           </div>
         </header>
+
+        {/* <p>{averageRating}</p> */}
 
         <section>
           <div className="rating">
