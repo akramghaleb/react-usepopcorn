@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Loader from "../Helpers/Loader";
 import ErrorMessage from "../Helpers/ErrorMessage";
 import StarRating from "../Helpers/StarRating";
+import useKey from "../CustomHooks/useKey";
 
 const KEY = '33fa474c'
 
@@ -57,19 +58,7 @@ export default function MovieDetails({
     const isTop = imdbRating > 8;
     console.log(isTop)
 
-    useEffect(() => {
-        function callback(e) {
-            if (e.code === "Escape") {
-                onCloseMovie()
-                // console.log("CLOSING")
-            }
-        }
-        document.addEventListener('keydown', callback)
-
-        return function () {
-            document.removeEventListener('keydown', callback)
-        }
-    }, [onCloseMovie])
+    useKey('Escape', onCloseMovie)
 
     useEffect(() => {
         async function getMovieDetails() {
